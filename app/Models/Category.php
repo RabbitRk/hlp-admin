@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable=['title','slug','summary','photo','status','is_parent','parent_id','added_by'];
 
+  
+    protected $fillable=['id','title','slug','summary','photo','status','is_parent','parent_id','added_by'];
+    protected $casts = [ 'id' => 'string'];
     public function parent_info(){
         return $this->hasOne('App\Models\Category','id','parent_id');
     }

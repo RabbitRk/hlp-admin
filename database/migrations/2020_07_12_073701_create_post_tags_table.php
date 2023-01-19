@@ -14,7 +14,7 @@ class CreatePostTagsTable extends Migration
     public function up()
     {
         Schema::create('post_tags', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('title');
             $table->string('slug')->unique();
             $table->enum('status',['active','inactive'])->default('active');

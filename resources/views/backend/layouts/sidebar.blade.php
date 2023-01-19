@@ -203,10 +203,24 @@
           <span>Coupon</span></a>
     </li>
      <!-- Users -->
-     <li class="nav-item">
+     <li class="nav-item d-none">
         <a class="nav-link" href="{{route('users.index')}}">
             <i class="fas fa-users"></i>
             <span>Users</span></a>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userCollapse" aria-expanded="true" aria-controls="tagCollapse">
+            <i class="fas fa-tags fa-folder"></i>
+            <span>Users</span>
+        </a>
+        <div id="userCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">User Options:</h6>
+            <a class="collapse-item" href="{{route('users.index')}}">Add User</a>
+            </div>
+        </div>
     </li>
      <!-- General settings -->
      <li class="nav-item">

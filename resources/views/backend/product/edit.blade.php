@@ -78,6 +78,14 @@
           @enderror
         </div>
         <div class="form-group">
+          <label for="sku" class="col-form-label">SKU</label>
+          <input id="sku" type="text" name="sku"  placeholder="Enter discount"  value="{{$product->sku}}" class="form-control">
+          @error('sku')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+        <div class="form-group">
           <label for="size">Size</label>
           <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
               <option value="">--Select any size--</option>

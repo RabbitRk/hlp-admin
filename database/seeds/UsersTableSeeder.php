@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -13,6 +14,7 @@ class UsersTableSeeder extends Seeder
     {
         $data=array(
             array(
+                'id'=>Str::uuid(),
                 'name'=>'Admin',
                 'email'=>'admin@gmail.com',
                 'password'=>Hash::make('1111'),
@@ -20,6 +22,7 @@ class UsersTableSeeder extends Seeder
                 'status'=>'active'
             ),
             array(
+                'id'=>Str::uuid(),
                 'name'=>'User',
                 'email'=>'user@gmail.com',
                 'password'=>Hash::make('1111'),

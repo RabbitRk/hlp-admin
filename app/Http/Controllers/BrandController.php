@@ -15,6 +15,7 @@ class BrandController extends Controller
     public function index()
     {
         $brand=Brand::orderBy('id','DESC')->paginate();
+       // dd($brand[0]->id);
         return view('backend.brand.index')->with('brands',$brand);
     }
 
@@ -46,6 +47,7 @@ class BrandController extends Controller
             $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
         }
         $data['slug']=$slug;
+        $data['id']=Str::uuid();
         // return $data;
         $status=Brand::create($data);
         if($status){

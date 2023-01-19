@@ -51,7 +51,9 @@
             </tr>
           </tfoot>
           <tbody>
-
+          @php 
+          $inc=1;
+          @endphp 
             @foreach($products as $product)
               @php
               $sub_cat_info=DB::table('categories')->select('title')->where('id',$product->child_cat_id)->get();
@@ -59,7 +61,7 @@
               $brands=DB::table('brands')->select('title')->where('id',$product->brand_id)->get();
               @endphp
                 <tr>
-                    <td>{{$product->id}}</td>
+                    <td>{{$inc++}}</td>
                     <td>{{$product->title}}</td>
                     <td>{{$product->cat_info['title']}}
                       <sub>

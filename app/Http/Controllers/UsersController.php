@@ -41,12 +41,13 @@ class UsersController extends Controller
             'name'=>'string|required|max:30',
             'email'=>'string|required|unique:users',
             'password'=>'string|required',
-            'role'=>'required|in:admin,user',
+            'role'=>'required|in:admin,user,support_team,shipping_team,store_manager',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
         ]);
         // dd($request->all());
         $data=$request->all();
+        $data['id']=Str::uuid();
         $data['password']=Hash::make($request->password);
         // dd($data);
         $status=User::create($data);
@@ -98,7 +99,7 @@ class UsersController extends Controller
         [
             'name'=>'string|required|max:30',
             'email'=>'string|required',
-            'role'=>'required|in:admin,user',
+            'role'=>'required|in:admin,user,support_team,shipping_team,store_manager',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
         ]);

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
 class PostCategory extends Model
 {
-    protected $fillable=['title','slug','status'];
+    protected $fillable=['id','title','slug','status'];
+    protected $casts = [ 'id' => 'string'];
 
     public function post(){
         return $this->hasMany('App\Models\Post','post_cat_id','id')->where('status','active');

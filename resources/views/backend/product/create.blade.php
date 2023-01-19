@@ -47,7 +47,7 @@
               @endforeach
           </select>
         </div>
-
+       
         <div class="form-group d-none" id="child_cat_div">
           <label for="child_cat_id">Sub Category</label>
           <select name="child_cat_id" id="child_cat_id" class="form-control">
@@ -72,6 +72,10 @@
           @error('discount')
           <span class="text-danger">{{$message}}</span>
           @enderror
+        </div>
+        <div class="form-group">
+            <label for="sku_id">SKU</label>
+            <input type="text" class="form-control" name="sku" id="sku">
         </div>
         <div class="form-group">
           <label for="size">Size</label>

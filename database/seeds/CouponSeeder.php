@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Str;
 class CouponSeeder extends Seeder
 {
     /**
@@ -13,12 +13,14 @@ class CouponSeeder extends Seeder
     {
         $data=array(
             array(
+                'id'=>Str::uuid(),
                 'code'=>'abc123',
                 'type'=>'fixed',
                 'value'=>'300',
                 'status'=>'active'
             ),
             array(
+                'id'=>Str::uuid(),
                 'code'=>'111111',
                 'type'=>'percent',
                 'value'=>'10',

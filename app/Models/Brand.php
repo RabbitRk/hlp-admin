@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    protected $fillable=['title','slug','status'];
+    protected $fillable=['id','title','slug','status'];
+
+    protected $casts = [ 'id' => 'string'];
 
     // public static function getProductByBrand($id){
     //     return Product::where('brand_id',$id)->paginate(10);

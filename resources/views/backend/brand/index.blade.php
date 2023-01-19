@@ -14,7 +14,8 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        @if(count($brands)>0)
+       
+        @if(count($brands)>0) 
         <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
@@ -35,9 +36,12 @@
               </tr>
           </tfoot>
           <tbody>
+            @php 
+            $i=1;
+            @endphp
             @foreach($brands as $brand)   
                 <tr>
-                    <td>{{$brand->id}}</td>
+                    <td>{{$i}}</td>
                     <td>{{$brand->title}}</td>
                     <td>{{$brand->slug}}</td>
                     <td>
@@ -75,7 +79,10 @@
                           </div>
                         </div>
                     </div> --}}
-                </tr>  
+                </tr> 
+                @php 
+            $i++;
+            @endphp
             @endforeach
           </tbody>
         </table>

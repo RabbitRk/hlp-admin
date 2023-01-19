@@ -48,6 +48,7 @@ class PostCategoryController extends Controller
             $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
         }
         $data['slug']=$slug;
+        $data['id']=Str::uuid();
         $status=PostCategory::create($data);
         if($status){
             request()->session()->flash('success','Post Category Successfully added');
@@ -97,6 +98,7 @@ class PostCategoryController extends Controller
             'status'=>'required|in:active,inactive'
         ]);
         $data=$request->all();
+       // $data['id']=Str::uuid();
         $status=$postCategory->fill($data)->save();
         if($status){
             request()->session()->flash('success','Post Category Successfully updated');

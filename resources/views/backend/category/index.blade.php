@@ -41,12 +41,14 @@
             </tr>
           </tfoot>
           <tbody>
+          @php
+          $k=1;
+          @endphp
 
             @foreach($categories as $category)
-              @php
-              @endphp
+             
                 <tr>
-                    <td>{{$category->id}}</td>
+                    <td>{{$k++}}</td>
                     <td>{{$category->title}}</td>
                     <td>{{$category->slug}}</td>
                     <td>{{(($category->is_parent==1)? 'Yes': 'No')}}</td>

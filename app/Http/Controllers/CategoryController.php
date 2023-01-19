@@ -16,8 +16,10 @@ class CategoryController extends Controller
     public function index()
     {
         $category=Category::getAllCategory();
-        // return $category;
-        return view('backend.category.index')->with('categories',$category);
+       // echo "<pre>";
+       // print_r($category);
+       // die;
+         return view('backend.category.index')->with('categories',$category);
     }
 
     /**
@@ -56,6 +58,7 @@ class CategoryController extends Controller
         }
         $data['slug']=$slug;
         $data['is_parent']=$request->input('is_parent',0);
+        $data['id']=Str::uuid();
         // return $data;   
         $status=Category::create($data);
         if($status){
@@ -114,6 +117,7 @@ class CategoryController extends Controller
         ]);
         $data= $request->all();
         $data['is_parent']=$request->input('is_parent',0);
+        //$data['id']=Str::uuid();
         // return $data;
         $status=$category->fill($data)->save();
         if($status){

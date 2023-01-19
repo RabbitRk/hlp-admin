@@ -63,6 +63,7 @@ class ProductController extends Controller
         ]);
 
         $data=$request->all();
+        //dd($data);
         $slug=Str::slug($request->title);
         $count=Product::where('slug',$slug)->count();
         if($count>0){
@@ -70,6 +71,7 @@ class ProductController extends Controller
         }
         $data['slug']=$slug;
         $data['is_featured']=$request->input('is_featured',0);
+        $data['id']=Str::uuid();
         $size=$request->input('size');
         if($size){
             $data['size']=implode(',',$size);

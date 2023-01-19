@@ -49,16 +49,16 @@
         </div>
         @php 
         $roles=DB::table('users')->select('role')->where('id',$user->id)->get();
-        // dd($roles);
+
+        $roles_table=DB::table('roles')->get();
         @endphp
         <div class="form-group">
             <label for="role" class="col-form-label">Role</label>
             <select name="role" class="form-control">
                 <option value="">-----Select Role-----</option>
-                @foreach($roles as $role)
-                    <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Admin</option>
-                    <option value="{{$role->role}}" {{(($role->role=='user') ? 'selected' : '')}}>User</option>
-                @endforeach
+                @foreach($roles_table as $role)
+                    <option value="{{$role->roles}}" {{(($role->roles==$roles[0]->role) ? 'selected' : '')}}>{{ $role->roles }}</option>
+                 @endforeach
             </select>
           @error('role')
           <span class="text-danger">{{$message}}</span>
