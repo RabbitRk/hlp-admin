@@ -82,6 +82,20 @@
           </div>
         </div>
     </li>
+    {{-- Product Variant --}}
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productvariant_collapse" aria-expanded="true" aria-controls="productvariant_collapse">
+          <i class="fas fa-cubes"></i>
+          <span>Product Variant</span>
+        </a>
+        <div id="productvariant_collapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Variant Product Options:</h6>
+            <a class="collapse-item" href="{{route('variant.index')}}"> Product Variants</a>
+            <a class="collapse-item" href="{{route('variant.create')}}">Add Product Variants</a>
+          </div>
+        </div>
+    </li>
 
     {{-- Brands --}}
     <li class="nav-item">

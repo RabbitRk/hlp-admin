@@ -16,8 +16,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role','photo','status','provider','provider_id',
+        'id','name', 'email', 'password','role','photo','status','provider','provider_id',
     ];
+    //protected $casts = [ ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -34,7 +35,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime','id' => 'string'
     ];
 
     public function orders(){

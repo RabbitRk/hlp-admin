@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Variant;
+use App\Variantdetails;
 
 use Illuminate\Support\Str;
 
@@ -32,8 +34,9 @@ class ProductController extends Controller
     {
         $brand=Brand::get();
         $category=Category::where('is_parent',1)->get();
-        // return $category;
-        return view('backend.product.create')->with('categories',$category)->with('brands',$brand);
+        $variant=Variant::where('status',1)->get();
+        
+        return view('backend.product.create')->with('categories',$category)->with('brands',$brand)->with('variant',$variant);
     }
 
     /**
@@ -62,8 +65,12 @@ class ProductController extends Controller
             'discount'=>'nullable|numeric'
         ]);
 
-        $data=$request->all();
-        //dd($data);
+       $data=$request->all();
+       
+      
+     
+       
+
         $slug=Str::slug($request->title);
         $count=Product::where('slug',$slug)->count();
         if($count>0){
@@ -71,7 +78,8 @@ class ProductController extends Controller
         }
         $data['slug']=$slug;
         $data['is_featured']=$request->input('is_featured',0);
-        $data['id']=Str::uuid();
+        $data['id']=Str::uuid(); 
+        $pre_product_id=$data['id'];
         $size=$request->input('size');
         if($size){
             $data['size']=implode(',',$size);
@@ -81,7 +89,11 @@ class ProductController extends Controller
         }
         // return $size;
         // return $data;
-        $status=Product::create($data);
+        $status=Product::create($data); 
+       //dd($status->id);
+        $varaint_array=array("id"=>Str::uuid(),"variant_id"=>Str::uuid(),"product_id"=>$pre_product_id,'variant_sku'=>json_encode($request->variation_sku),'variant_value'=>json_encode($request->variation_value));
+
+        $check_insersted = Variantdetails::create($varaint_array);  // inserted 
         if($status){
             request()->session()->flash('success','Product Successfully added');
         }
@@ -111,14 +123,19 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+
         $brand=Brand::get();
         $product=Product::findOrFail($id);
         $category=Category::where('is_parent',1)->get();
-        $items=Product::where('id',$id)->get();
+        $items=Product::where('id',$id)->get(); 
+
+        $variable_products=Variantdetails::where('product_id',$id)->get();
+      //  dd($variable_products);
+
         // return $items;
         return view('backend.product.edit')->with('product',$product)
                     ->with('brands',$brand)
-                    ->with('categories',$category)->with('items',$items);
+                    ->with('categories',$category)->with('items',$items)->with('variable_products',$variable_products);
     }
 
     /**
@@ -149,6 +166,7 @@ class ProductController extends Controller
         ]);
 
         $data=$request->all();
+       
         $data['is_featured']=$request->input('is_featured',0);
         $size=$request->input('size');
         if($size){

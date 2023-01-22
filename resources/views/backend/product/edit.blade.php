@@ -86,20 +86,44 @@
         </div>
 
         <div class="form-group">
-          <label for="size">Size</label>
+        <label for="size">Size</label>
+          @php 
+           $variable_product=json_decode($variable_products);  
+         
+           
+           $get_keys_value=json_decode($variable_product[0]->variant_value);
+           $get_sku_keys=json_decode($variable_product[0]->variant_sku);
+           
+          @endphp
+          @foreach($get_keys_value as $key=>$varations)
+          <input type="checkbox" checked value="{{ $key }}" class="{{ $key }}" name="listof_variants[]" id="{{ $key }}">{{ $key }}
+          @endforeach
+          @foreach($get_keys_value as $key=>$varations)
+            @foreach($varations as $value)
+              <input type="text"  value="{{ $value }}" class="{{ $key }}" name="variation_value['{{$key}}']['{{$value}}']" id="{{ $key }}">
+            @endforeach
+          @endforeach
+
+          @foreach($get_sku_keys as $key=>$varations)
+            @foreach($varations as $value)
+              <input type="text"  value="{{ $value }}" class="{{ $key }}" name="variation_value['{{$key}}']['{{$value}}']" id="{{ $key }}">
+            @endforeach
+          @endforeach
+
+          <!-- <label for="size">Size</label>
           <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
               <option value="">--Select any size--</option>
               @foreach($items as $item)              
                 @php 
                 $data=explode(',',$item->size);
-                // dd($data);
+              
                 @endphp
               <option value="S"  @if( in_array( "S",$data ) ) selected @endif>Small</option>
               <option value="M"  @if( in_array( "M",$data ) ) selected @endif>Medium</option>
               <option value="L"  @if( in_array( "L",$data ) ) selected @endif>Large</option>
               <option value="XL"  @if( in_array( "XL",$data ) ) selected @endif>Extra Large</option>
               @endforeach
-          </select>
+          </select> -->
         </div>
         <div class="form-group">
           <label for="brand_id">Brand</label>
