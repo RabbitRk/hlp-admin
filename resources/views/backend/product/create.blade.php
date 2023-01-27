@@ -94,7 +94,22 @@
             <label for="sku_id">SKU</label>
             <input type="text" class="form-control" name="sku" id="sku">
         </div>
+
         <div class="form-group">
+          <label for="">
+          Select Variable product or simple product ? <span class="text-danger">*</span>
+          </label>
+          <br>
+       <select name="check_variable" class="form-control" id="variable_product">
+        <option value="">Select</option>
+        <option value="0">Simple Product</option>
+        <option value="1">Variable Product</option>
+       </select>
+        @error('check_variable')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+        <div class="form-group variable_show">
           <h2>Product Variation</h2>
           <!-- <button class="add_variation btn btn-primary" id="add_variation">Add Variation</button> -->
          
@@ -110,16 +125,7 @@
           </div> 
 
         </div>
-        <!-- <div class="form-group">
-          <label for="size">Size</label>
-          <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
-              <option value="">--Select any size--</option>
-              <option value="S">Small (S)</option>
-              <option value="M">Medium (M)</option>
-              <option value="L">Large (L)</option>
-              <option value="XL">Extra Large (XL)</option>
-          </select>
-        </div> -->
+      
 
         <div class="form-group">
           <label for="brand_id">Brand</label>
@@ -261,12 +267,23 @@
 </script>
 
 <script> 
-
+$(document).ready(function(){
+  $(".variable_show").hide();
+  $("#variable_product").change(function(){
+    if($(this).val()==1){
+      $(".variable_show").show();
+    }
+    else 
+    {
+      $(".variable_show").hide();
+    }
+  })
+});
 
 var uniquid=0;
 $(document).on('click','.dynamic_variation [type="checkbox"]',function(){
 
-           
+           ///console.log()
               var inc=$(this).attr("id");  
               var check_click=$(this).prop('checked'); 
              if(check_click==true){
@@ -275,10 +292,11 @@ $(document).on('click','.dynamic_variation [type="checkbox"]',function(){
               // alert(len)
               if(len<=0){
                 $("div#dynamic_div_"+inc).prepend("<h3 class='myclass_"+inc+"'>"+inc+"</h3>");
+                $(".myclass_"+inc).after("<button id='"+inc+"' class='add_more_variants'>Add More "+inc+"</button><br/>");
               }
               sku_value = document.createElement("input");
               sku_value.setAttribute("type", 'text');
-              sku_value.setAttribute("name", 'variation_value['+inc+']['+uniquid+']');
+              sku_value.setAttribute("name", 'variation_value['+inc+'][]');
               sku_value.classList.add("variation_value_"+inc);
               sku_value.setAttribute("placeholder", "Variation Value");
               const variation_value= document.getElementById("dynamic_div_"+inc);
@@ -287,7 +305,7 @@ $(document).on('click','.dynamic_variation [type="checkbox"]',function(){
               var sku='';
               sku = document.createElement("input");
               sku.setAttribute("type", 'text');
-              sku.setAttribute("name", 'variation_sku['+inc+']['+uniquid+']');
+              sku.setAttribute("name", 'variation_sku['+inc+'][]');
               sku.classList.add("variation_sku_"+inc);
               sku.setAttribute("placeholder", "Variation SKU");
               const sku_logics= document.getElementById("dynamic_div_"+inc);
@@ -297,13 +315,36 @@ $(document).on('click','.dynamic_variation [type="checkbox"]',function(){
               else{ 
                 console.log("else conditions")
                 $("#dynamic_div_"+inc).html("");
-  $("#dynamic_div_"+inc).html("");
+                $("#dynamic_div_"+inc).html("");
               }
   
 
 
 });
 
+
+$(document).on('click','.dynamic_variation .sku_class .add_more_variants',function(e){
+  e.preventDefault();
+              var variation=$(this).attr("id");
+              sku_value = document.createElement("input");
+              sku_value.setAttribute("type", 'text');
+              sku_value.setAttribute("name", 'variation_value['+variation+'][]');
+              sku_value.classList.add("variation_value_"+variation);
+              sku_value.setAttribute("placeholder", "Variation Value");
+              const variation_value= document.getElementById("dynamic_div_"+variation);
+              variation_value.appendChild(sku_value); 
+
+              var sku='';
+              sku = document.createElement("input");
+              sku.setAttribute("type", 'text');
+              sku.setAttribute("name", 'variation_sku['+variation+'][]');
+              sku.classList.add("variation_sku_"+variation);
+              sku.setAttribute("placeholder", "Variation SKU");
+              const sku_logics= document.getElementById("dynamic_div_"+variation);
+              sku_logics.appendChild(sku);        
+              uniquid++;
+
+});
 
 // to add variation logic
 //    document.getElementById("add_variation").onclick = function() {myFunction(event)};

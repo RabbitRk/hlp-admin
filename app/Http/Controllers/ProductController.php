@@ -47,7 +47,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
+ 
+
         $this->validate($request,[
             'title'=>'string|required',
             'summary'=>'string|required',
@@ -62,7 +63,8 @@ class ProductController extends Controller
             'status'=>'required|in:active,inactive',
             'condition'=>'required|in:default,new,hot',
             'price'=>'required|numeric',
-            'discount'=>'nullable|numeric'
+            'discount'=>'nullable|numeric',
+            'check_variable'=>'required'
         ]);
 
        $data=$request->all();
@@ -80,13 +82,13 @@ class ProductController extends Controller
         $data['is_featured']=$request->input('is_featured',0);
         $data['id']=Str::uuid(); 
         $pre_product_id=$data['id'];
-        $size=$request->input('size');
-        if($size){
-            $data['size']=implode(',',$size);
-        }
-        else{
-            $data['size']='';
-        }
+        // $size=$request->input('size');
+        // if($size){
+        //     $data['size']=implode(',',$size);
+        // }                        
+        // else{                
+        //     $data['size']='';
+        // }    
         // return $size;
         // return $data;
         $status=Product::create($data); 
@@ -129,13 +131,16 @@ class ProductController extends Controller
         $category=Category::where('is_parent',1)->get();
         $items=Product::where('id',$id)->get(); 
 
-        $variable_products=Variantdetails::where('product_id',$id)->get();
+        $variable_products=Variantdetails::where('product_id',$id)->get(); 
+        $variant=Variant::where('status',1)->get();
       //  dd($variable_products);
 
         // return $items;
         return view('backend.product.edit')->with('product',$product)
                     ->with('brands',$brand)
-                    ->with('categories',$category)->with('items',$items)->with('variable_products',$variable_products);
+                    ->with('categories',$category)->with('items',$items)
+                    ->with('variable_products',$variable_products)
+                    ->with('variant',$variant);
     }
 
     /**
@@ -147,6 +152,9 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        // echo json_encode($request->variation_sku);
+        // die;
         $product=Product::findOrFail($id);
         $this->validate($request,[
             'title'=>'string|required',
@@ -177,6 +185,14 @@ class ProductController extends Controller
         }
         // return $data;
         $status=$product->fill($data)->save();
+
+        //$varaint_array=array("product_id"=>$id,'variant_sku'=>json_encode($request->variation_sku),'variant_value'=>json_encode($request->variation_value));
+
+        // $check_insersted = Variantdetails::create($varaint_array);
+
+        $affectedRows = Variantdetails::where("product_id",$id)->update(["variant_sku" => json_encode($request->variation_sku),'variant_value'=>json_encode($request->variation_value)]);
+
+        
         if($status){
             request()->session()->flash('success','Product Successfully updated');
         }

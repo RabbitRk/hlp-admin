@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Cart;
+use App\Variantdetails;
 class Product extends Model
 {
-    protected $fillable=['id','title','slug','summary','sku','description','cat_id','child_cat_id','price','brand_id','discount','status','photo','size','stock','is_featured','condition'];
+    protected $fillable=['id','title','slug','summary','sku','description','cat_id','child_cat_id','price','brand_id','discount','status','photo','check_variable','stock','is_featured','condition'];
     protected $casts = [ 'id' => 'string','cat_id' => 'string','child_cat_id'=> 'string'];
     public function cat_info(){
         return $this->hasOne('App\Models\Category','id','cat_id');
@@ -45,5 +46,9 @@ class Product extends Model
     public function brand(){
         return $this->hasOne(Brand::class,'id','brand_id');
     }
+    public function variations(){
+        return $this->hasOne(Variantdetails::class,'variant_value','variant_sku');
+    }
+
 
 }

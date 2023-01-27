@@ -1,6 +1,22 @@
 @extends('backend.layouts.master')
 
 @section('main-content')
+<style>
+  div#append_variation input[type="text"],.sku_class input[type="text"] {
+    border: 1px solid #ccc;
+    width: 46%;
+    padding: 8px;
+    margin:10px 5px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+
+}
+.sku_class{
+  border: 1px solid #ccc;
+    border-radius: 20px;
+    margin:10px auto;
+}
+</style>
 
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
@@ -86,44 +102,53 @@
         </div>
 
         <div class="form-group">
-        <label for="size">Size</label>
-          @php 
+       <h2>Product Variation</h2>
+          
+        @php 
            $variable_product=json_decode($variable_products);  
-         
-           
            $get_keys_value=json_decode($variable_product[0]->variant_value);
-           $get_sku_keys=json_decode($variable_product[0]->variant_sku);
-           
+           $get_sku_keys=json_decode($variable_product[0]->variant_sku); 
           @endphp
-          @foreach($get_keys_value as $key=>$varations)
-          <input type="checkbox" checked value="{{ $key }}" class="{{ $key }}" name="listof_variants[]" id="{{ $key }}">{{ $key }}
-          @endforeach
-          @foreach($get_keys_value as $key=>$varations)
-            @foreach($varations as $value)
-              <input type="text"  value="{{ $value }}" class="{{ $key }}" name="variation_value['{{$key}}']['{{$value}}']" id="{{ $key }}">
-            @endforeach
-          @endforeach
 
-          @foreach($get_sku_keys as $key=>$varations)
-            @foreach($varations as $value)
-              <input type="text"  value="{{ $value }}" class="{{ $key }}" name="variation_value['{{$key}}']['{{$value}}']" id="{{ $key }}">
-            @endforeach
-          @endforeach
 
-          <!-- <label for="size">Size</label>
-          <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
-              <option value="">--Select any size--</option>
-              @foreach($items as $item)              
-                @php 
-                $data=explode(',',$item->size);
-              
-                @endphp
-              <option value="S"  @if( in_array( "S",$data ) ) selected @endif>Small</option>
-              <option value="M"  @if( in_array( "M",$data ) ) selected @endif>Medium</option>
-              <option value="L"  @if( in_array( "L",$data ) ) selected @endif>Large</option>
-              <option value="XL"  @if( in_array( "XL",$data ) ) selected @endif>Extra Large</option>
-              @endforeach
-          </select> -->
+          <!-- For getting Keys only -->
+          @foreach($get_keys_value as $key=>$varations)
+            @php
+               $assigned_values[]=$key; 
+            @endphp
+          @endforeach 
+
+            <!-- For getting Keys only Ends -->
+
+            <!-- Initial variation Starts -->
+
+            <div class="dynamic_variation">
+                  @foreach($variant as $variant_values) 
+                      <input type="checkbox" class="{{ $variant_values->variation_value }}" @php  if(in_array($variant_values->variation_value,$assigned_values)){ echo "checked"; }  @endphp value="{{ $variant_values->variation_value }}" class="{{ $variant_values->variation_value }}" name="listof_variants[]" id="{{ $variant_values->variation_value }}">{{ $variant_values->variation_value }}
+                      <div id="dynamic_div_{{$variant_values->variation_value}}" class="sku_class">
+                     
+                      @if(in_array($variant_values->variation_value,$assigned_values))
+                    @php
+                      $maim_var_values = (array) $get_keys_value;
+                      $main_var_skus =  (array) $get_sku_keys; 
+                    @endphp
+                    <h3 class="myclass_{{ $variant_values->variation_value }}">{{ $variant_values->variation_value }}</h3> 
+                    <button class="add_more_variants" id="{{ $variant_values->variation_value }}">Add More {{ $variant_values->variation_value }}</button><br>
+                      @foreach($maim_var_values[$variant_values->variation_value] as $variants_enws)
+                     <input type="text" class="{{ $variant_values->variation_value }}" value="{{ $variants_enws }}" name="variation_value[{{ $variant_values->variation_value }}][]">
+                     @endforeach
+                     @foreach($main_var_skus[$variant_values->variation_value] as $variants_skulists)
+                     <input type="text" class="{{ $variant_values->variation_value }}" value="{{ $variants_skulists }}" name="variation_sku[{{ $variant_values->variation_value }}][]">
+                     @endforeach
+
+                         @endif
+                      </div>
+                  @endforeach
+          </div>
+         <!-- Initial variation checked ends -->
+
+       
+        
         </div>
         <div class="form-group">
           <label for="brand_id">Brand</label>
@@ -263,5 +288,72 @@
         if(child_cat_id!=null){
             $('#cat_id').change();
         }
+</script>
+<script> 
+var uniquid=0;
+$(document).on('click','.dynamic_variation [type="checkbox"]',function(){
+
+           ///console.log()
+              var inc=$(this).attr("id");  
+              var check_click=$(this).prop('checked'); 
+             if(check_click==true){
+                var sku_value='';
+              var len= $(".myclass_"+inc).length; 
+              // alert(len)
+              if(len<=0){
+                $("div#dynamic_div_"+inc).prepend("<h3 class='myclass_"+inc+"'>"+inc+"</h3>");
+                $(".myclass_"+inc).after("<button id='"+inc+"' class='add_more_variants'>Add More "+inc+"</button><br/>");
+              }
+              sku_value = document.createElement("input");
+              sku_value.setAttribute("type", 'text');
+              sku_value.setAttribute("name", 'variation_value['+inc+'][]');
+              sku_value.classList.add("variation_value_"+inc);
+              sku_value.setAttribute("placeholder", "Variation Value");
+              const variation_value= document.getElementById("dynamic_div_"+inc);
+              variation_value.appendChild(sku_value); 
+
+              var sku='';
+              sku = document.createElement("input");
+              sku.setAttribute("type", 'text');
+              sku.setAttribute("name", 'variation_sku['+inc+'][]');
+              sku.classList.add("variation_sku_"+inc);
+              sku.setAttribute("placeholder", "Variation SKU");
+              const sku_logics= document.getElementById("dynamic_div_"+inc);
+              sku_logics.appendChild(sku);        
+              uniquid++;
+             }
+              else{ 
+                console.log("else conditions")
+                $("#dynamic_div_"+inc).html("");
+                $("#dynamic_div_"+inc).html("");
+              }
+  
+
+
+});
+
+
+$(document).on('click','.dynamic_variation .sku_class .add_more_variants',function(e){
+  e.preventDefault();
+              var variation=$(this).attr("id");
+              sku_value = document.createElement("input");
+              sku_value.setAttribute("type", 'text');
+              sku_value.setAttribute("name", 'variation_value['+variation+'][]');
+              sku_value.classList.add("variation_value_"+variation);
+              sku_value.setAttribute("placeholder", "Variation Value");
+              const variation_value= document.getElementById("dynamic_div_"+variation);
+              variation_value.appendChild(sku_value); 
+
+              var sku='';
+              sku = document.createElement("input");
+              sku.setAttribute("type", 'text');
+              sku.setAttribute("name", 'variation_sku['+variation+'][]');
+              sku.classList.add("variation_sku_"+variation);
+              sku.setAttribute("placeholder", "Variation SKU");
+              const sku_logics= document.getElementById("dynamic_div_"+variation);
+              sku_logics.appendChild(sku);        
+              uniquid++;
+
+});
 </script>
 @endpush

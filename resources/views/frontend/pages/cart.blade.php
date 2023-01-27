@@ -40,13 +40,25 @@
 								@csrf
 								@if(Helper::getAllProductFromCart())
 									@foreach(Helper::getAllProductFromCart() as $key=>$cart)
+									@php 
+											$variation_selcted_arr=(array) json_decode($cart->variations);
+									@endphp 
 										<tr>
 											@php
 											$photo=explode(',',$cart->product['photo']);
 											@endphp
 											<td class="image" data-title="No"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></td>
 											<td class="product-des" data-title="Description">
-												<p class="product-name"><a href="{{route('product-detail',$cart->product['slug'])}}" target="_blank">{{$cart->product['title']}}</a></p>
+												<p class="product-name"><a href="{{route('product-detail',$cart->product['slug'])}}" target="_blank">{{$cart->product['title']}}</a>
+												<br> 
+												@if(count($variation_selcted_arr))
+												Variation selected(
+											@foreach($variation_selcted_arr as $keys=>$value_variation)
+													<b>{{ $keys }}  - </b><i>{{ $value_variation}}</i>
+											@endforeach
+											) 
+											@endif
+											</p>
 												<p class="product-des">{!!($cart['summary']) !!}</p>
 											</td>
 											<td class="price" data-title="Price"><span>${{number_format($cart['price'],2)}}</span></td>

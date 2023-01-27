@@ -17,6 +17,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Variantdetails;
 class FrontendController extends Controller
 {
    
@@ -50,8 +51,11 @@ class FrontendController extends Controller
 
     public function productDetail($slug){
         $product_detail= Product::getProductBySlug($slug);
-        // dd($product_detail);
-        return view('frontend.pages.product_detail')->with('product_detail',$product_detail);
+        $product_id = $product_detail->id; 
+       $variant = Variantdetails::where('product_id','=', $product_id)->get()->toArray(); 
+      // dd( $variant->);
+
+        return view('frontend.pages.product_detail')->with('product_detail',$product_detail)->with('variation_front_end',$variant);
     }
 
     public function productGrids(){

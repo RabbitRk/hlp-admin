@@ -100,25 +100,39 @@
 											</div> --}}
 											<!--/ End Color -->
 											<!-- Size -->
-											@if($product_detail->size)
+<!-- 										
 												<div class="size mt-4">
 													<h4>Size</h4>
 													<ul>
-														@php 
-															$sizes=explode(',',$product_detail->size);
-															// dd($sizes);
-														@endphp
-														@foreach($sizes as $size)
-														<li><a href="#" class="one">{{$size}}</a></li>
-														@endforeach
+														<li><a href="#" class="one">tetstt</a></li>
 													</ul>
 												</div>
-											@endif
+											 -->
 											<!--/ End Size -->
 											<!-- Product Buy -->
 											<div class="product-buy">
 												<form action="{{route('single-add-to-cart')}}" method="POST">
 													@csrf 
+													<div class="variation_id d-flex">
+														@if($variation_front_end!=null)
+															@php 
+															  $variables=json_decode($variation_front_end[0]['variant_value']); 
+															  @endphp  
+															  @if($variables!=null)
+															  @foreach($variables as $key=>$test)
+															<h3>{{ $key }}</h3><br>
+															  <select name="variation[{{ $key  }}]" id=" {{ $key  }} ">
+																	@foreach($test as $differentvaraon)
+																	<option value="{{ $differentvaraon }}">{{$differentvaraon }}</option>
+																	@endforeach
+															  </select>
+															  <br>
+															
+															  
+															  @endforeach
+															  @endif
+														@endif
+													</div>
 													<div class="quantity">
 														<h6>Quantity :</h6>
 														<!-- Input Order -->
@@ -532,37 +546,6 @@
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
+    
 
 @endpush

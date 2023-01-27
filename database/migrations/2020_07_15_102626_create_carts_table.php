@@ -15,10 +15,11 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id');
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->uuid('product_id');
+            $table->uuid('order_id')->nullable();
+            $table->uuid('user_id')->nullable();
             $table->float('price');
+            $table->json('variations')->nullable();
             $table->enum('status',['new','progress','delivered','cancel'])->default('new');
             $table->integer('quantity');
             $table->float('amount');
